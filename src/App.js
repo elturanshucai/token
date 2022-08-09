@@ -10,6 +10,8 @@ import Login from './Components/Login'
 import Nav from './Components/Nav'
 import SignIn from './Components/SignIn'
 import './app.css'
+import PostReq from './Components/PostReq'
+import GetReq from './Components/GetReq'
 
 class App extends Component {
   state = {}
@@ -35,6 +37,8 @@ class App extends Component {
             <Route path='/' element={<Home user={this.state.user} />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<SignIn />} />
+            <Route path='/post' element={<PostReq />} />
+            <Route path='/list' element={<GetReq />} />
           </Routes>
         </div>
 
