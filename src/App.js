@@ -1,5 +1,4 @@
-import axios from 'axios'
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import {
   BrowserRouter,
   Routes,
@@ -12,39 +11,44 @@ import SignIn from './Components/SignIn'
 import './app.css'
 import PostReq from './Components/PostReq'
 import GetReq from './Components/GetReq'
+import Profile from './Profile'
+import Protected from './Protected'
+import ActiveLinks from './Components/ActiveLinks'
+import axios from 'axios'
 
-class App extends Component {
-  state = {}
-  componentDidMount = () => {
-    axios.get('user').then(
-      res => {
-        this.setState({
-          user: res.data
-        })
-      },
-      err => {
-        console.log(err)
-      }
-    )
-  }
+function App() {
+  const [login, setLogin] = useState(false)
+  // useEffect(() => {
+  //   if (localStorage.getItem('token')) {
+  //     setLogin(true)
+  //   }
+  //   else {
+  //     setLogin(false)
+  //   }
+  // }, [])
 
-  render() {
-    return (
-      <BrowserRouter>
-        <div className='wrapper'>
-          <Nav user={this.state.user} />
-          <Routes>
-            <Route path='/' element={<Home user={this.state.user} />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<SignIn />} />
-            <Route path='/post' element={<PostReq />} />
-            <Route path='/list' element={<GetReq />} />
-          </Routes>
-        </div>
+  return (
+    <BrowserRouter>
+      <div className='wrapper'>
+        <Nav login={login} setLogin={setLogin} />
+        <ActiveLinks/>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login2' element={<Login setLogin={setLogin} />} />
+          <Route path='/register' element={<SignIn />} />
+          <Route path='/post' element={<PostReq />} />
+          <Route path='/list' element={<GetReq />} />
+          <Route
+            path='/user'
+            element={
+              <Protected login={login}><Profile /></Protected>
+            }
+          />
+        </Routes>
+      </div>
 
-      </BrowserRouter>
-    )
-  }
+    </BrowserRouter>
+  )
 }
 
 export default App

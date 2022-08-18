@@ -1,52 +1,53 @@
-import React, {Component} from "react";
-import axios from 'axios'
+import React, { useState } from "react";
+import axios from 'axios';
+import { user } from '../data';
+import { useNavigate } from "react-router-dom";
 
-class Login extends Component{
-    state={
-        email: '',
-        password: ''
-    }
-    componentDidUpdate=()=>{
-        console.log(this.state.email)
-    }
-    handleSubmit=(e)=>{
-        e.preventDefault()
+function Login(props) {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const navigate = useNavigate()
 
-        const data={
-            email: this.email,
-            password: this.password
+    const handleSubmit = async e => {
+        e.preventDefault();
+        if (user.email === email && user.password === password) {
+            const data = user;
+            data.id = 1;
+            try {
+                const res = axios.post('login2', data)
+                const token=(await res).data
+                localStorage.setItem('token', token)
+                props.setLogin(true)
+                console.log(token);
+            } catch (error) {
+                console.log(error)
+            }
+            navigate('/')
+
         }
-        axios.post('login', data)
-            .then(res=>{
-                localStorage.setItem('token', res.data.token)
-            })
-            .catch(err=>{
-                console.log(err)
-            })
     }
 
-    render(){
-        return(
-            <form onSubmit={this.handleSubmit} className="login-form">
-                <h3>Login</h3>
 
-                <div className="email">
-                    <label>
-                        <span>Email</span>
-                        <input type="email" placeholder="Email" onChange={(e)=>this.setState({email: e.target.value})}/>
-                    </label>
-                </div>
-                <div className="password">
-                    <label>
-                        <span>Password</span>
-                        <input type="password" placeholder="Password" onChange={(e)=>this.setState({password: e.target.value})}/>
-                    </label>
-                </div>
+    return (
+        <form onSubmit={handleSubmit} className="login-form">
+            <h3>Login</h3>
 
-                <button className="lgn-btn">Login</button>
-            </form>
-        )
-    }
+            <div className="email">
+                <label>
+                    <span>Email</span>
+                    <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                </label>
+            </div>
+            <div className="password">
+                <label>
+                    <span>Password</span>
+                    <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                </label>
+            </div>
+
+            <button className="lgn-btn">Login</button>
+        </form>
+    )
 }
 
 export default Login;

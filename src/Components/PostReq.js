@@ -7,7 +7,6 @@ export default class PostReq extends React.Component {
         userId: '',
         title: '',
         body: ''
-
     }
 
     handleSubmit = (e) => {

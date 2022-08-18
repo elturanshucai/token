@@ -4,14 +4,21 @@ import {
 } from 'react-router-dom'
 
 class Nav extends Component {
+    logout=()=>{
+        localStorage.removeItem('token')
+        this.props.setLogin(false)
+    }
     render() {
         let buttons;
-        if (this.props.user) {
-            buttons = <button onClick={()=>localStorage.removeItem('token')}>Log Out</button>
+        if (localStorage.getItem('token')) {
+            buttons = <>
+            <Link to='/user' className="login-btn">Profile</Link>
+            <Link to='/' onClick={this.logout} className="log-out-btn">Log Out</Link>
+            </>
         }
         else {
             buttons = <>
-                <Link to='/login' className="login-btn">Login</Link>
+                <Link to='/user' className="login-btn">Login</Link>
                 <Link to='/register' className="register-btn">Sign In</Link>
             </>
         }
